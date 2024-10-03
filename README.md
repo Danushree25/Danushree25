@@ -189,7 +189,8 @@ void delete_pos() {
             if (temp->prev != NULL) {
                 temp->prev->next = temp->next;
             }
-            if (temp->next != NULL) {
+            if (temp->next != NULL) 
+            {
                 temp->next->prev = temp->prev;
             }
             free(temp);
