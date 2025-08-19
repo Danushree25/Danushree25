@@ -1,0 +1,78 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX 100
+
+typedef struct {
+    int arr[MAX];
+    int top;
+} Stack;
+
+Stack stack;
+
+void initStack() {
+    stack.top = -1; 
+}
+
+void push() {
+    if (stack.top >= MAX - 1) {
+        printf("Stack overflow\n");
+    } else {
+        int value;
+        printf("Enter the value: ");
+        scanf("%d", &value);
+        stack.arr[++stack.top] = value; 
+    }
+}
+
+void pop() {
+    if (stack.top < 0) {
+        printf("Stack underflow\n");
+    } else {
+        printf("Popped out element is %d\n", stack.arr[stack.top--]); 
+    }
+}
+
+void display() {
+    if (stack.top < 0) {
+        printf("Stack is empty\n");
+    } else {
+        printf("Stack elements are: ");
+        for (int i = 0; i <= stack.top; i++) {
+            printf("%d ", stack.arr[i]);
+        }
+        printf("\n");
+    }
+}
+
+int main() {
+    int choice;
+    initStack(); 
+
+    while (1) {
+        printf("\nMenu");
+        printf("\n1. Push");
+        printf("\n2. Pop");
+        printf("\n3. Display");
+        printf("\n4. Exit");
+        printf("\nEnter choice: ");
+        scanf("%d", &choice);
+        
+        switch (choice) {
+            case 1:
+                push();
+                break;
+            case 2:
+                pop();
+                break;
+            case 3:
+                display();
+                break;
+            case 4:
+                exit(0); 
+                break;
+            default:
+                printf("\nWrong choice\n");
+        }
+    }
+    return 0;
+}
