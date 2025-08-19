@@ -1,0 +1,135 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX 100  
+
+int a[MAX];  
+int n = 0;   
+
+void create();
+void display();
+void search();
+void sort();
+void insert();
+void delete();
+
+int main() {
+    int choice;
+    while (1) {
+        printf("\nMenu");
+        printf("\n1. Create");
+        printf("\n2. Display");
+        printf("\n3. Search");
+        printf("\n4. Sort");
+        printf("\n5. Insert");
+        printf("\n6. Delete");
+        printf("\n7. Exit");
+        printf("\nEnter your choice: ");
+        scanf("%d", &choice);
+        switch (choice) {
+            case 1:
+                create();
+                break;
+            case 2:
+                display();
+                break;
+            case 3:
+                search();
+                break;
+            case 4:
+                sort();
+                break;
+            case 5:
+                insert();
+                break;
+            case 6:
+                delete();
+                break;
+            case 7:
+                exit(0);
+                break;
+            default:
+                printf("\nWrong choice");
+                break;
+        }
+    }
+}
+
+void create() {
+    printf("Enter the number of elements (max %d): ", MAX);
+    scanf("%d", &n);
+    if (n > MAX) n = MAX;  
+    for (int i = 0; i < n; i++) {
+        printf("Enter element %d: ", i + 1);
+        scanf("%d", &a[i]);
+    }
+}
+
+void display() {
+    printf("The array elements are: ");
+    for (int i = 0; i < n; i++) {
+        printf("%d ", a[i]);
+    }
+    printf("\n");
+}
+
+void search() {
+    int key;
+    printf("Enter the element to search: ");
+    scanf("%d", &key);
+    for (int i = 0; i < n; i++) {
+        if (a[i] == key) {
+            printf("Element %d is found at index %d.\n", key, i);
+            return;
+        }
+    }
+    printf("Element %d is not found.\n", key);
+}
+
+void sort() {
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = i + 1; j < n; j++) {
+            if (a[i] > a[j]) {
+                int temp = a[i];
+                a[i] = a[j];
+                a[j] = temp;
+            }
+        }
+    }
+    printf("Array sorted.\n");
+}
+
+void insert() {
+    if (n >= MAX) {
+        printf("Array is full, cannot insert.\n");
+        return;
+    }
+    int pos, ele;
+    printf("Enter the position and element to insert: ");
+    scanf("%d %d", &pos, &ele);
+    if (pos < 0 || pos > n) {
+        printf("Invalid position.\n");
+        return;
+    }
+    for (int i = n; i > pos; i--) {
+        a[i] = a[i - 1];
+    }
+    a[pos] = ele;
+    n++;
+    printf("Element inserted.\n");
+}
+
+void delete() {
+    int pos;
+    printf("Enter the position to be deleted: ");
+    scanf("%d", &pos);
+    if (pos < 0 || pos >= n) {
+        printf("Invalid position.\n");
+        return;
+    }
+    for (int i = pos; i < n - 1; i++) {
+        a[i] = a[i + 1];
+    }
+    n--;
+    printf("Element deleted.\n");
+}
