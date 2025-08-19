@@ -1,0 +1,228 @@
+#include <stdlib.h>
+#include <stdio.h>
+
+struct node {
+    int data;
+    struct node* next;
+};
+
+struct node* head = NULL; 
+
+struct node* getnode();
+void create();
+void display();
+void insert_begin();
+void insert_pos();
+void insert_end();
+void delete_begin();
+void delete_pos();
+void delete_end();
+
+int main() {
+    int choice;
+    while (1) {
+        printf("\nMenu");
+        printf("\n1. Create");
+        printf("\n2. Display");
+        printf("\n3. Insert at beginning");
+        printf("\n4. Insert at position");
+        printf("\n5. Insert at end");
+        printf("\n6. Delete from beginning");
+        printf("\n7. Delete from position");
+        printf("\n8. Delete from end");
+        printf("\n9. Exit");
+        printf("\nEnter choice: ");
+        scanf("%d", &choice);
+        
+        switch (choice) {
+            case 1: create(); break;
+            case 2: display(); break;
+            case 3: insert_begin(); break;
+            case 4: insert_pos(); break;
+            case 5: insert_end(); break;
+            case 6: delete_begin(); break;
+            case 7: delete_pos(); break;
+            case 8: delete_end(); break;
+            case 9: exit(0);
+                break;
+            default: printf("\nWrong choice");
+                break;
+        }
+    }
+    return 0;
+}
+
+struct node* getnode() {
+    struct node* newnode = (struct node*)malloc(sizeof(struct node)); 
+    if (!newnode) {
+        printf("Memory allocation failed\n");
+        exit(1);
+    }
+    printf("Enter data: ");
+    scanf("%d", &newnode->data);
+    newnode->next = NULL; 
+    return newnode;
+}
+
+void create() {
+    struct node* newnode = getnode(); 
+    head = newnode; 
+    newnode->next = head;
+}
+
+void display() {
+    if (head == NULL) {
+        printf("List is empty\n");
+        return;
+    }
+    struct node* temp = head;
+    do {
+        printf("%d -> ", temp->data);
+        temp = temp->next;
+    } while (temp != head);
+    printf("(back to head)\n");
+}
+
+void insert_begin() {
+    struct node* newnode = getnode();
+    if (head == NULL) {
+        head = newnode;
+        newnode->next = head;
+    } else {
+        struct node* temp = head;
+        while (temp->next != head) {
+            temp = temp->next; 
+        }
+        temp->next = newnode; 
+        newnode->next = head; 
+        head = newnode; 
+    }
+}
+
+void insert_pos() {
+    struct node* newnode = getnode();
+    if (head == NULL) {
+        head = newnode;
+        newnode->next = head; 
+        return;
+    }
+
+    int pos;
+    printf("Enter position: ");
+    scanf("%d", &pos);
+    
+    if (pos == 0) {
+        insert_begin();
+        return;
+    }
+
+    struct node* temp = head;
+    struct node* prev = NULL;
+    for (int i = 0; i < pos && temp->next != head; i++) {
+        prev = temp;
+        temp = temp->next;
+    }
+    
+    if (prev != NULL) {
+        prev->next = newnode;
+        newnode->next = temp;
+    } else {
+        free(newnode);
+        printf("Position out of bounds\n");
+    }
+}
+
+void insert_end() {
+    struct node* newnode = getnode();
+    if (head == NULL) {
+        head = newnode;
+        newnode->next = head;
+    } else {
+        struct node* temp = head;
+        while (temp->next != head) {
+            temp = temp->next; 
+        }
+        temp->next = newnode; 
+        newnode->next = head; 
+    }
+}
+
+void delete_begin() {
+    if (head == NULL) {
+        printf("List is empty\n");
+        return;
+    }
+
+    struct node* temp = head;
+    if (temp->next == head) { 
+        free(head);
+        head = NULL;
+    } else {
+        struct node* last = head;
+        while (last->next != head) {
+            last = last->next; 
+        }
+        last->next = head->next;
+        free(head); 
+        head = last->next; 
+    }
+}
+
+void delete_pos() {
+    if (head == NULL) {
+        printf("List is empty\n");
+        return;
+    }
+
+    int pos;
+    printf("Enter position: ");
+    scanf("%d", &pos);
+
+    if (pos == 0) {
+        delete_begin();
+        return;
+    }
+
+    struct node* temp = head;
+    struct node* prev = NULL;
+    for (int i = 0; i < pos && temp->next != head; i++) {
+        prev = temp;
+        temp = temp->next;
+    }
+
+    if (temp == head) {
+        printf("Position out of bounds\n");
+        return;
+    }
+
+    if (prev != NULL) {
+        prev->next = temp->next;
+        free(temp); 
+    } else {
+        printf("Position out of bounds\n");
+    }
+}
+
+void delete_end() {
+    if (head == NULL) {
+        printf("List is empty\n");
+        return;
+    }
+
+    struct node* temp = head;
+    struct node* prev = NULL;
+
+    if (temp->next == head) { 
+        free(head);
+        head = NULL;
+        return;
+    }
+
+    while (temp->next != head) {
+        prev = temp;
+        temp = temp->next; 
+    }
+
+    prev->next = head; 
+    free(temp); 
+}
