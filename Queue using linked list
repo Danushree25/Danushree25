@@ -1,0 +1,81 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node {
+    int val;
+    struct node* next;
+};
+struct node* front = NULL;
+struct node* rear = NULL;
+
+void enqueue() {
+    int val;
+    struct node* ptr = (struct node*)malloc(sizeof(struct node));
+    if (ptr == NULL) {
+        printf("Not able to enqueue the element\n");
+        return;
+    }
+    printf("Enter the value: ");
+    scanf("%d", &val);
+    ptr->val = val;
+    ptr->next = NULL; 
+    if (rear == NULL) {
+        front = rear = ptr;
+    } else {
+        rear->next = ptr;
+        rear = ptr;
+    }
+    printf("Item enqueued: %d\n", val);
+}
+
+void dequeue() {
+    if (front == NULL) {
+        printf("Underflow: Queue is empty\n");
+        return;
+    }
+    struct node* temp = front; 
+    front = front->next; 
+    if (front == NULL) {
+        rear = NULL;
+    }
+    printf("Item dequeued: %d\n", temp->val);
+    free(temp); 
+}
+
+void display() {
+    struct node* ptr = front;
+    if (ptr == NULL) {
+        printf("Queue is empty\n");
+        return;
+    }
+    printf("Printing Queue elements:\n");
+    while (ptr != NULL) {
+        printf("%d\n", ptr->val);
+        ptr = ptr->next; 
+    }
+}
+
+int main() {
+    int choice;
+    while (1) {
+        printf("\n1. Enqueue\n2. Dequeue\n3. Display\n4. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+        switch (choice) {
+            case 1:
+                enqueue();
+                break;
+            case 2:
+                dequeue();
+                break;
+            case 3:
+                display();
+                break;
+            case 4:
+                exit(0);
+            default:
+                printf("Invalid choice\n");
+        }
+    }
+    return 0;
+}
