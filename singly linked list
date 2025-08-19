@@ -1,0 +1,216 @@
+#include <stdlib.h>
+#include <stdio.h>
+
+struct node { 
+    int data;
+    struct node* next;
+};
+struct node* newnode;
+struct node* head = NULL;
+struct node* temp;
+struct node* prev;
+struct node* getnode();
+void create();
+void display();
+void insert_begin();
+void insert_pos();
+void insert_end();
+void delete_begin();
+void delete_pos();
+void delete_end();
+
+int main() {
+    int choice;
+    while (1) {
+        printf("\nMenu");
+        printf("\n1. Create");
+        printf("\n2. Display");
+        printf("\n3. Insert at beginning");
+        printf("\n4. Insert at position");
+        printf("\n5. Insert at end");
+        printf("\n6. Delete from beginning");
+        printf("\n7. Delete from position");
+        printf("\n8. Delete from end");
+        printf("\n9. Exit");
+        printf("\nEnter choice: ");
+        scanf("%d", &choice);
+        
+        switch (choice) {
+            case 1:
+                create();
+                break;
+            case 2:
+                display();
+                break;
+            case 3:
+                insert_begin();
+                break;
+            case 4:
+                insert_pos();
+                break;
+            case 5:
+                insert_end();
+                break;
+            case 6:
+                delete_begin();
+                break;
+            case 7:
+                delete_pos();
+                break;
+            case 8:
+                delete_end();
+                break;
+            case 9:
+                exit(0) ;
+            default:
+                printf("\nWrong choice");
+        }
+    }
+    return 0;
+}
+
+struct node* getnode() {
+    newnode = (struct node*)malloc(sizeof(struct node)); 
+    if (!newnode) {
+        printf("Memory allocation failed\n");
+        exit(1);
+    }
+    printf("Enter data: ");
+    scanf("%d", &newnode->data);
+    newnode->next = NULL; 
+    return newnode;
+}
+
+void create() {
+    newnode = getnode();
+    head = newnode;
+}
+
+void display() {
+    if (head == NULL) {
+        printf("List is empty\n");
+        return;
+    }
+    temp = head;
+    while (temp != NULL) {
+        printf("%d -> ", temp->data);
+        temp = temp->next;
+    }
+    printf("NULL\n");
+}
+
+void insert_begin() {
+    newnode = getnode();
+    newnode->next = head; 
+    head = newnode;
+}
+
+void insert_pos() {
+    newnode = getnode();
+    if (head == NULL) {
+        head = newnode;
+        return;
+    }
+
+    int pos;
+    printf("Enter position: ");
+    scanf("%d", &pos);
+    
+    if (pos == 0) {
+        newnode->next = head;
+        head = newnode;
+        return;
+    }
+
+    temp = head;
+    prev = NULL;
+    for (int i = 0; i < pos && temp != NULL; i++) {
+        prev = temp;
+        temp = temp->next;
+    }
+    
+    if (prev != NULL) {
+        prev->next = newnode;
+        newnode->next = temp;
+    } else {
+        free(newnode);
+        printf("Position out of bounds\n");
+    }
+}
+
+void insert_end() {
+    newnode = getnode();
+    if (head == NULL) {
+        head = newnode;
+        return;
+    }
+
+    temp = head;
+    while (temp->next != NULL) {
+        temp = temp->next;
+    }
+    temp->next = newnode;
+}
+
+void delete_begin() {
+    if (head == NULL) {
+        printf("List is empty\n");
+    } else {
+        temp = head;
+        head = head->next;
+        free(temp) ;
+    }
+}
+
+void delete_pos() {
+    if (head == NULL) {
+        printf("List is empty\n");
+        return;
+    }
+
+    int pos;
+    printf("Enter position: ");
+    scanf("%d", &pos);
+
+    if (pos == 0) {
+        delete_begin();
+        return;
+    }
+
+    temp = head;
+    prev = NULL;
+    for (int i = 0; i < pos && temp != NULL; i++) {
+        prev = temp;
+        temp = temp->next;
+    }
+
+    if (temp == NULL) {
+        printf("Position out of bounds\n");
+        return;
+    }
+
+    prev->next = temp->next; 
+    free(temp); 
+}
+
+void delete_end() {
+    if (head == NULL) {
+        printf("List is empty\n");
+        return;
+    }
+
+    if (head->next == NULL) { 
+        free(head);
+        head = NULL;
+        return;
+    }
+
+    temp = head;
+    prev = NULL;
+    while (temp->next != NULL) {
+        prev = temp;
+        temp = temp->next;
+    }
+    prev->next = NULL;
+    free(temp); 
+}
